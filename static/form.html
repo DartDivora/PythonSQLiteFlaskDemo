@@ -1,0 +1,24 @@
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="hi">
+    <meta name="author" content="">
+    <title>test.com</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="static/styles/bootstrap.min.css" rel="stylesheet">
+    </head>
+<body>
+<div class="container">
+    <h1>Enter some text</h1>
+    <h2>(it will be converted to uppercase)</h2>
+    <form action="/accounts/add" method="POST">
+	    <label for="id">AccountID:</label>
+		<input type="text" class="form-control" id="id" name="id">
+	    <label for="name">Account Name:</label>
+		<input type="text" class="form-control" id="name" name="name">
+        <input type="submit" name="form" value="Submit">
+    </form>
+</div>
+</body>
+</html>
