@@ -76,42 +76,6 @@ def dummyPaymentsData(count):
                     (payment_amount, invoice_number, account_id))
         con.commit()
 
-
-def selectAllFromTable(tableName):
-    cur = con.cursor()
-    cur.execute("SELECT * FROM " + tableName)
-    return cur
-
-
-def selectAllFromTableHTML(tableName):
-    cur = selectAllFromTable(tableName)
-    resultHTML = """<html lang="en"><head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="hi">
-    <meta name="author" content="">
-    <title>Nick Sanft - Flask Demo</title>
-    <!-- Bootstrap Core CSS -->
-    <link href="static/styles/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body>
-    <table class="table table-striped">
-    <thead>
-    <tr>
-    """
-    columnNames = []
-    for column in cur.description:
-        resultHTML += "<th>" + column[0] + " </th> \n"
-    resultHTML += "</tr></thead><tbody> \n"
-    for row in cur:
-        resultHTML += "<tr> \n"
-        for column in row:
-            resultHTML += "<td>" + str(column) + " </td> \n"
-        resultHTML += "</tr> \n"
-    resultHTML += "</tbody></table></div></body></html>"
-    return resultHTML
-
 def insertIntoAccounts(account_id,account_name):
     cur = con.cursor()
     cur.execute("INSERT INTO accounts VALUES (?,?)",(account_id,account_name))
