@@ -29,6 +29,26 @@ def dropAllTables():
         cur.execute(query)
         con.commit()
 
+# USE AT YOUR OWN RISK, DELETES ALL ROWS FROM ALL TABLES
+
+
+def cleanTables():
+    cur = con.cursor()
+    cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
+    for row in cur:
+        con.cursor().execute("DELETE FROM " + row[0])
+        con.commit()
+
+
+def tableExists(tableName):
+    cur = con.cursor()
+    cur.execute(
+        "SELECT COUNT(1) FROM sqlite_master WHERE type='table' AND name=?;", (tableName,))
+    if(cur.fetchone()[0] < 1):
+        return False
+    return True
+
+
 def selectAllFromTable(tableName):
     cur = con.cursor()
     cur.execute("SELECT * FROM " + tableName)

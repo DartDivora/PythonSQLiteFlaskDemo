@@ -13,9 +13,11 @@ def index():
 
 
 @app.route("/<tableName>")
-def getAccounts(tableName):
-    result = du.selectAllFromTableHTML(tableName)
-    return result
+def getSQLTable(tableName):
+    if(du.tableExists(tableName)):
+        result = du.selectAllFromTableHTML(tableName)
+        return result
+    return "No table found with the name: " + tableName
 
 if __name__ == "__main__":
     app.run()
