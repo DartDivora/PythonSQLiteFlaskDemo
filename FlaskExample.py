@@ -4,12 +4,13 @@ This is meant to be a simple web demo using the Flask python library.
 
 from flask import Flask, request
 import DatabaseUtils as du
+import HTMLStrings
 app = Flask(__name__, static_url_path='/static')
 
 
 @app.route("/")
 def index():
-    return app.send_static_file("index.html")
+    return HTMLStrings.HTML["index"]
 
 
 @app.route("/<tableName>/<methodName>", methods=['GET'])

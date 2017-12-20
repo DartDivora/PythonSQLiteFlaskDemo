@@ -1,6 +1,7 @@
 import sqlite3 as sql
 from DatabaseConstants import DatabaseConstants
 import DatabaseTestingUtils as dtu
+import HTMLStrings
 
 dc = DatabaseConstants()
 con = sql.connect(dc.databaseName)
@@ -57,21 +58,7 @@ def selectAllFromTable(tableName):
 
 def selectAllFromTableHTML(tableName):
     cur = selectAllFromTable(tableName)
-    resultHTML = """<html lang="en"><head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="hi">
-    <meta name="author" content="">
-    <title>Flask Demo</title>
-    <!-- Bootstrap Core CSS -->
-    <link href="static/styles/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body>
-    <table class="table table-striped">
-    <thead>
-    <tr>
-    """
+    resultHTML = HTMLStrings.HTML["selectTable"]
     columnNames = []
     for column in cur.description:
         resultHTML += "<th>" + column[0] + " </th> \n"
@@ -84,29 +71,21 @@ def selectAllFromTableHTML(tableName):
     resultHTML += "</tbody></table></div></body></html>"
     return resultHTML
 
-def executeQuery(query,tupleValues):
+
+def executeQuery(query, tupleValues):
     cur = con.cursor()
-    cur.execute(query,tupleValues)
+    cur.execute(query, tupleValues)
     con.commit()
 
-def getHTMLForm(tableName,methodName):
+
+def getHTMLForm(tableName, methodName):
     cur = con.cursor()
     query = """PRAGMA table_info('{0}')""".format(tableName,)
     cur.execute(query)
-    formHTML = """<html lang="en"><head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="hi">
-        <meta name="author" content="">
-        <title>test.com</title>
-        <link href="/static/styles/bootstrap.min.css" rel="stylesheet">
-        </head>
-    <body>
-    <div class="container">
-        <h1>Enter some text</h1>
-        <form action="/{0}/{1}" method="POST">""".format(str(tableName),str(methodName))
+    formHTML = HTMLStrings.HTML["insertForm"].format(
+        str(tableName), str(methodName))
     for row in cur:
-        formHTML += """<label for="{0}">{0}({1}):</label><input type="text" class="form-control" id="{0}" name="{0}">""".format(str(row[1]),str(row[2]))
+        formHTML += """<label for="{0}">{0}({1}):</label><input type="text" class="form-control" id="{0}" name="{0}">""".format(
+            str(row[1]), str(row[2]))
     formHTML += """<input type="submit" name="form" value="Submit"></form></div></body></html>"""
     return formHTML
