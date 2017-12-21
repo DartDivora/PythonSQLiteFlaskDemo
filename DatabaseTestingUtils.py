@@ -2,13 +2,25 @@
 This contains all functions related to testing and "dummy" data to populate the tables.
 """
 import sqlite3 as sql
-from DatabaseConstants import DatabaseConstants
 from random import *
+import Config
 
-dc = DatabaseConstants()
-con = sql.connect(dc.databaseName)
+con = sql.connect(Config.Database["databaseName"])
 
-#This function gets a random account ID from the accounts table.
+firstNames = ["John", "Bill", "Tim", "Susan", "Kaitlyn",
+              "Caitlyn", "Matt", "Josh", "Alex", "Alexis", "Terrence", "Billy", "William", "Josie", "Dale", "Jim", "Jimmy"]
+lastNames = ["Smith", "Phillips", "Trembley",
+             "Elizabeth", "Johnson", "Jonson", "Johannson", "Cooper", "Gretzky", "Patel", "Robertson", "Horne", "Cyrus", "Bellamy", "Mozart", "Chopin", "Debussy"]
+cities = ["St. Paul", "Eagan", "Plano", "Nashville",
+          "Paris", "London", "Springfield", "New York City", "Smyrna", "Murfreesboro", "Dallas", "Fargo", "Duluth", "Bemidji", "Somewhere", "Chicago", "Brunswick", "Franklin", "Shelbyville"]
+states = ["TX", "MN", "MO", "TN", "KY", "AK", "AL", "NY",
+          "HI", "ME", "ND", "SD", "IL", "OH", "MA", "MI", "OR", "MT"]
+accountNames = [
+    "Big boy's trucking", "Cirque du Soleil", "Google", "Yahoo", "Apple", "Oracle", "Microsoft", "Home Furniture", "Penn and Teller", "Gillette", "Something", "Something else", "Weird"]
+
+# This function gets a random account ID from the accounts table.
+
+
 def getRandomAccountID():
     cur = con.cursor()
     cur.execute(
@@ -16,7 +28,9 @@ def getRandomAccountID():
     account_id = cur.fetchone()[0]
     return account_id
 
-#This function gets a random unpaid invoice from the invoice table.
+# This function gets a random unpaid invoice from the invoice table.
+
+
 def getRandomUnpaidInvoice():
     cur = con.cursor()
     cur.execute(
@@ -28,18 +42,18 @@ def dummyAccountsData(count):
     cur = con.cursor()
     for i in range(1, count):
         cur.execute("REPLACE INTO accounts VALUES (?,?)",
-                    (randint(111111, 999999), choice(dc.accountNames)))
+                    (randint(111111, 999999), choice(accountNames)))
     con.commit()
 
 
 def dummyContactsData(count):
     cur = con.cursor()
     for i in range(1, count):
-        randFirstName = choice(dc.firstNames)
-        randLastName = choice(dc.lastNames)
+        randFirstName = choice(firstNames)
+        randLastName = choice(lastNames)
         email = randFirstName + "@" + randLastName + ".com"
         cur.execute("REPLACE INTO contacts VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-                    (randint(111111, 999999), randFirstName, "", randLastName, "123 Test Street", choice(dc.cities), choice(dc.states), str(randint(11111, 99999)), "6151234567", email, getRandomAccountID()))
+                    (randint(111111, 999999), randFirstName, "", randLastName, "123 Test Street", choice(cities), choice(states), str(randint(11111, 99999)), "6151234567", email, getRandomAccountID()))
     con.commit()
 
 
@@ -76,7 +90,15 @@ def dummyPaymentsData(count):
                     (payment_amount, invoice_number, account_id))
         con.commit()
 
-def insertIntoAccounts(account_id,account_name):
+
+def insertIntoAccounts(account_id, account_name):
     cur = con.cursor()
-    cur.execute("INSERT INTO accounts VALUES (?,?)",(account_id,account_name))
+    cur.execute("INSERT INTO accounts VALUES (?,?)",
+                (account_id, account_name))
     con.commit()
+
+dummyAccountsData(10)
+dummyContactsData(20)
+dummyCreditCardData(10)
+dummyInvoiceData(10)
+dummyPaymentsData(10)

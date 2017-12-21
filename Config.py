@@ -1,3 +1,15 @@
+Database = {
+    "databaseName": "payments.db",
+    "createTablesQuery": """
+        CREATE TABLE IF NOT EXISTS accounts (account_id INTEGER PRIMARY KEY, account_name varchar(200));
+        CREATE TABLE IF NOT EXISTS contacts (contact_id INTEGER PRIMARY KEY, contact_first_name  varchar(200) , contact_middle_name varchar(200) , contact_last_name varchar(200) , contact_address varchar(200) , contact_city varchar(40) , contact_state varchar(2) , contact_zip varchar(10) , contact_phone varchar(20) , contact_email varchar(400) , account_id INTEGER );
+        CREATE TABLE IF NOT EXISTS credit_cards (credit_card_id INTEGER PRIMARY KEY, credit_card char(16) , credit_card_pin char(4) , account_id INTEGER );
+        CREATE TABLE IF NOT EXISTS payments (payment_id INTEGER PRIMARY KEY, payment_amount money , invoice_number varchar(10) , account_id INTEGER );
+        CREATE TABLE IF NOT EXISTS invoices (invoice_id INTEGER PRIMARY KEY, invoice_number varchar(10) , invoice_total_amount money , invoice_current_amount money , account_id INTEGER );
+        CREATE TABLE IF NOT EXISTS something (invoice_id INTEGER, invoice_number varchar(10) , invoice_total_amount money , invoice_current_amount money , account_id INTEGER );
+        """
+}
+
 HTML = {
     "insertForm": """<html lang="en"><head>
         <meta charset="utf-8">

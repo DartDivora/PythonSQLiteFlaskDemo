@@ -1,20 +1,14 @@
 import sqlite3 as sql
-from DatabaseConstants import DatabaseConstants
-import DatabaseTestingUtils as dtu
-import HTMLStrings
+import Config
 
-dc = DatabaseConstants()
-con = sql.connect(dc.databaseName)
+con = sql.connect(Config.Database["databaseName"])
 
 
 # This function creates all necessary tables needed in the SQLite database.
 def createTables():
     cur = con.cursor()
-    cur.execute(dc.getAccountsTableCreateQuery())
-    cur.execute(dc.getContactsTableCreateQuery())
-    cur.execute(dc.getCreditCardsTableCreateQuery())
-    cur.execute(dc.getPaymentsTableCreateQuery())
-    cur.execute(dc.getInvoicesTableCreateQuery())
+    cur.executescript(Config.Database["createTablesQuery"])
+    print("Created all tables!")
     con.commit()
 
 # This function drops all non-system tables in the SQLite database. BE CAREFUL USING THIS FUNCTION!!!
@@ -58,7 +52,7 @@ def selectAllFromTable(tableName):
 
 def selectAllFromTableHTML(tableName):
     cur = selectAllFromTable(tableName)
-    resultHTML = HTMLStrings.HTML["selectTable"]
+    resultHTML = Config.HTML["selectTable"]
     columnNames = []
     for column in cur.description:
         resultHTML += "<th>" + column[0] + " </th> \n"
@@ -82,10 +76,25 @@ def getHTMLForm(tableName, methodName):
     cur = con.cursor()
     query = """PRAGMA table_info('{0}')""".format(tableName,)
     cur.execute(query)
-    formHTML = HTMLStrings.HTML["insertForm"].format(
+    formHTML = Config.HTML["insertForm"].format(
         str(tableName), str(methodName))
     for row in cur:
         formHTML += """<label for="{0}">{0}({1}):</label><input type="text" class="form-control" id="{0}" name="{0}">""".format(
             str(row[1]), str(row[2]))
     formHTML += """<input type="submit" name="form" value="Submit"></form></div></body></html>"""
     return formHTML
+
+
+"""
+This is the main database script used to communicate with the SQLite database.
+This contains all necessary methods to create the schema for this database.
+"""
+
+
+def main():
+    createTables()
+    # dropAllTables()
+
+
+if __name__ == "__main__":
+    main()
