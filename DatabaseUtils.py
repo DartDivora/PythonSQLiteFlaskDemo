@@ -53,7 +53,8 @@ def selectAllFromTable(tableName):
 
 def selectAllFromTableHTML(tableName):
     cur = selectAllFromTable(tableName)
-    resultHTML = Config.HTML["selectTable"]
+    resultHTML = Config.HTML["header"]
+    resultHTML += Config.HTML["selectTable"]
     columnNames = []
     for column in cur.description:
         resultHTML += "<th>" + column[0] + " </th> \n"
@@ -77,7 +78,8 @@ def getHTMLForm(tableName, methodName):
     cur = con.cursor()
     query = """PRAGMA table_info('{0}')""".format(tableName,)
     cur.execute(query)
-    formHTML = Config.HTML["insertForm"].format(
+    formHTML = Config.HTML["header"]
+    formHTML += Config.HTML["insertForm"].format(
         str(tableName), str(methodName))
     for row in cur:
         formHTML += """<label for="{0}">{0}({1}):</label><input type="text" class="form-control" id="{0}" name="{0}">""".format(

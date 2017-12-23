@@ -11,15 +11,14 @@ Database = {
 }
 
 HTML = {
-    "insertForm": """<html lang="en"><head>
-        <meta charset="utf-8">
+    "header":"""
+        <html lang="en"><head><meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="hi">
-        <meta name="author" content="">
-        <title>test.com</title>
-        <link href="/static/styles/bootstrap.min.css" rel="stylesheet">
-        </head>
+        <meta name="description" content="hi"><meta name="author" content="">
+        <title>test.com</title><link href="/static/styles/bootstrap.min.css" rel="stylesheet"></head>
+        """,
+    "insertForm": """
         <body>
         <div class="container">
             <h1>Enter some text</h1>

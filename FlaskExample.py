@@ -10,7 +10,7 @@ app = Flask(__name__, static_url_path='/static')
 
 @app.route("/")
 def index():
-    return Config.HTML["index"]
+    return Config.HTML["header"] + Config.HTML["index"]
 
 
 @app.route("/<tableName>/<methodName>", methods=['GET'])
