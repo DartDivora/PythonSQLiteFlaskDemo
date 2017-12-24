@@ -12,6 +12,18 @@ app = Flask(__name__, static_url_path='/static')
 def index():
     return Config.HTML["header"] + Config.HTML["index"]
 
+@app.route("/query", methods=['GET'])
+def getQueryForm():
+    formHTML = Config.HTML["header"] + Config.HTML["insertForm"].format("query")
+    formHTML += """<label for="{0}">{0}:</label><input type="text" class="form-control" id="{0}" name="{0}">""".format("SQLQuery")
+    formHTML += """<input type="submit" name="form" value="Submit"></form></div></body></html>"""
+    return formHTML
+
+@app.route("/query", methods=['POST'])
+def getQueryResults():
+    SQLquery = request.form['SQLQuery']
+    result = du.queryToHTML(SQLquery,None)
+    return result
 
 @app.route("/<tableName>/<methodName>", methods=['GET'])
 def getForm(tableName, methodName):
@@ -41,7 +53,7 @@ def insertNewRow(tableName, methodName):
 @app.route("/<tableName>")
 def getSQLTable(tableName):
     if(du.tableExists(tableName)):
-        result = du.selectAllFromTableHTML(tableName)
+        result = du.selectAllFromTableHTML("SELECT * FROM " + str(tableName))
         return result
     return "No table found with the name: " + tableName
 

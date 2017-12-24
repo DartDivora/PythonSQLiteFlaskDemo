@@ -51,8 +51,12 @@ def selectAllFromTable(tableName):
     return cur
 
 
-def selectAllFromTableHTML(tableName):
-    cur = selectAllFromTable(tableName)
+def selectAllFromTableHTML(query):
+    return queryToHTML(query,None)
+
+
+def queryToHTML(query,tupleValues):
+    cur = executeQuery(query, tupleValues)
     resultHTML = Config.HTML["header"]
     resultHTML += Config.HTML["selectTable"]
     columnNames = []
@@ -67,11 +71,14 @@ def selectAllFromTableHTML(tableName):
     resultHTML += "</tbody></table></div></body></html>"
     return resultHTML
 
-
 def executeQuery(query, tupleValues):
     cur = con.cursor()
-    cur.execute(query, tupleValues)
+    if tupleValues is None:
+        cur.execute(query)
+    else:
+        cur.execute(query, tupleValues)
     con.commit()
+    return cur
 
 
 def getHTMLForm(tableName, methodName):
@@ -80,7 +87,7 @@ def getHTMLForm(tableName, methodName):
     cur.execute(query)
     formHTML = Config.HTML["header"]
     formHTML += Config.HTML["insertForm"].format(
-        str(tableName), str(methodName))
+        str(tableName) + "/" + str(methodName))
     for row in cur:
         formHTML += """<label for="{0}">{0}({1}):</label><input type="text" class="form-control" id="{0}" name="{0}">""".format(
             str(row[1]), str(row[2]))
