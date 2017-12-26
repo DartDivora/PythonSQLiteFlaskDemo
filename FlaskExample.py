@@ -13,21 +13,26 @@ app = Flask(__name__, static_url_path='/static')
 def index():
     return Config.HTML["header"] + Config.HTML["index"]
 
+
 @app.route("/query", methods=['GET'])
 def getQueryForm():
-    formHTML = Config.HTML["header"] + Config.HTML["insertForm"].format("query")
-    formHTML += """<label for="{0}">{0}:</label><input type="text" class="form-control" id="{0}" name="{0}">""".format("SQLQuery")
+    formHTML = Config.HTML["header"] + \
+        Config.HTML["insertForm"].format("query")
+    formHTML += """<label for="{0}">{0}:</label><input type="text" class="form-control" id="{0}" name="{0}">""".format(
+        "SQLQuery")
     formHTML += """<input type="submit" name="form" value="Submit"></form></div></body></html>"""
     return formHTML
+
 
 @app.route("/query", methods=['POST'])
 def getQueryResults():
     SQLquery = request.form['SQLQuery']
     try:
-        result = du.queryToHTML(SQLquery,None)
+        result = du.queryToHTML(SQLquery, None)
     except sql.Error as er:
-        return "SQL ERROR: " + str(er)
+        result = "SQL ERROR: " + str(er)
     return result
+
 
 @app.route("/<tableName>/<methodName>", methods=['GET'])
 def getForm(tableName, methodName):
@@ -49,8 +54,11 @@ def insertNewRow(tableName, methodName):
             columnValues.append(v)
     query = """INSERT INTO {0} ({1}) VALUES ({2})""".format(
         tableName, ",".join(columnNames), ",".join(columnParameters))
-    du.executeQuery(query, tuple(columnValues))
-    result = "Successfully inserted row!"
+    try:
+        du.executeQuery(query, tuple(columnValues))
+        result = "Successfully inserted row!"
+    except sql.Error as er:
+        result = "SQL ERROR: " + str(er)
     return result
 
 
