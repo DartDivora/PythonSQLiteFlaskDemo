@@ -5,6 +5,7 @@ This is meant to be a simple web demo using the Flask python library.
 from flask import Flask, request
 import DatabaseUtils as du
 import Config
+import sqlite3 as sql
 app = Flask(__name__, static_url_path='/static')
 
 
@@ -22,7 +23,10 @@ def getQueryForm():
 @app.route("/query", methods=['POST'])
 def getQueryResults():
     SQLquery = request.form['SQLQuery']
-    result = du.queryToHTML(SQLquery,None)
+    try:
+        result = du.queryToHTML(SQLquery,None)
+    except sql.Error as er:
+        return "SQL ERROR: " + str(er)
     return result
 
 @app.route("/<tableName>/<methodName>", methods=['GET'])
