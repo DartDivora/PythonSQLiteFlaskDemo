@@ -97,6 +97,7 @@ def insertIntoAccounts(account_id, account_name):
                 (account_id, account_name))
     con.commit()
 
+
 dummyAccountsData(10)
 dummyContactsData(20)
 dummyCreditCardData(10)

@@ -52,10 +52,10 @@ def selectAllFromTable(tableName):
 
 
 def selectAllFromTableHTML(query):
-    return queryToHTML(query,None)
+    return queryToHTML(query, None)
 
 
-def queryToHTML(query,tupleValues):
+def queryToHTML(query, tupleValues):
     cur = executeQuery(query, tupleValues)
     resultHTML = Config.HTML["header"]
     resultHTML += Config.HTML["selectTable"]
@@ -70,6 +70,7 @@ def queryToHTML(query,tupleValues):
         resultHTML += "</tr> \n"
     resultHTML += "</tbody></table></div></body></html>"
     return resultHTML
+
 
 def executeQuery(query, tupleValues):
     cur = con.cursor()
